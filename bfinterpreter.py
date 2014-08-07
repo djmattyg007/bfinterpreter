@@ -2,8 +2,7 @@
 
 class Tape:
     def __init__(self):
-        self.cells = [0]
-        self.pointer = 0
+        self.reset()
 
     def inc_val(self):
         self.cells[self.pointer] += 1
@@ -27,6 +26,10 @@ class Tape:
     def print_val(self):
         print(chr(self.cells[self.pointer]), end="")
 
+    def reset(self):
+        self.cells = [0]
+        self.pointer = 0
+
 class Brainfuck:
     def __init__(self, tape, program, allow_nested_loops = True, debug = False):
         self.tape = tape
@@ -41,6 +44,10 @@ class Brainfuck:
             "<" : self.tape.move_left,
             "." : self.tape.print_val
         }
+
+    def reset(self):
+        self.tape.reset()
+        self.pointer = 0
 
     def end_loop(self):
         nested_loop_count = 0
