@@ -79,6 +79,8 @@ class Brainfuck:
                     self.pointer += 1
                 else:
                     self.pointer = loop_start
+            else:
+                self.pointer += 1
             if self.debug == True and self.pointer < program_length:
                 print(self.pointer, "\t", self.program[self.pointer], "\t", self.tape.pointer, "\t", self.tape.get_val())
                 time.sleep(0.1)
