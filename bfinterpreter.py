@@ -48,6 +48,7 @@ class Brainfuck:
             self.pointer += 1
             if self.program[self.pointer] == "]":
                 if nested_loop_count == 0:
+                    self.pointer += 1
                     break
                 else:
                     nested_loop_count -= 1
@@ -69,13 +70,13 @@ class Brainfuck:
                 self.basic_ops[char]()
                 self.pointer += 1
             elif char == "[":
-                loop_pointers.append(self.pointer)
                 if self.tape.get_val() == 0:
                     if self.allow_nested_loops == True:
                         self.end_loop()
                     else:
-                        self.pointer = self.program.index("]", self.pointer)
+                        self.pointer = self.program.index("]", self.pointer) + 1
                 else:
+                    loop_pointers.append(self.pointer)
                     self.pointer += 1
             elif char == "]":
                 loop_start = loop_pointers.pop()
