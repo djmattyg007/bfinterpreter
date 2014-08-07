@@ -89,6 +89,10 @@ class Brainfuck:
 if __name__ == "__main__":
     import sys
 
+    def read_program_file(filename):
+        with open(filename, encoding="utf-8") as program_file:
+            return program_file.read()
+
     def parse_bool(string):
         if string == "true" or string == "y" or string == "yes":
             return True
@@ -105,6 +109,8 @@ if __name__ == "__main__":
     for x, arg in enumerate(args):
         if arg == "--program":
             program = args[x + 1]
+        elif arg == "--program-file":
+            program = read_program_file(args[x + 1])
         elif arg == "--nested-loops":
             allow_nested_loops = parse_bool(args[x + 1])
         elif arg == "--debug":
