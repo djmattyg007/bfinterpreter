@@ -34,11 +34,11 @@ class Brainfuck:
         self.pointer = 0
         self.allow_nested_loops = allow_nested_loops
         self.basic_ops = {
-            "+" : tape.inc_val,
-            "-" : tape.dec_val,
-            ">" : tape.move_right,
-            "<" : tape.move_left,
-            "." : tape.print_val
+            "+" : self.tape.inc_val,
+            "-" : self.tape.dec_val,
+            ">" : self.tape.move_right,
+            "<" : self.tape.move_left,
+            "." : self.tape.print_val
         }
 
     def end_loop(self):
@@ -77,8 +77,24 @@ class Brainfuck:
                     self.pointer = loop_start
 
 
-program = "++++++++[>++++++++++<-]>++.>++++++++[>++++++++++<-]>-.>++++++[>++++++++++<-]>++++++.>++++++[>++++++++++<-]>++++++.[>+<-]>+++++++.[>+<-]>----."
-tape = Tape()
-brainfuck = Brainfuck(tape, program, False)
-brainfuck.run_program()
+if __name__ == "__main__":
+    import sys
+
+    program = ""
+    allow_nested_loops = True
+
+    args = sys.argv[1:]
+    for x, arg in enumerate(args):
+        if arg == "--program":
+            program = args[x + 1]
+        elif arg == "--nested-loops":
+            if args[x + 1] == "true":
+                allow_nested_loops = True
+            elif args[x + 1] == "false":
+                allow_nested_loops = False
+
+
+    tape = Tape()
+    brainfuck = Brainfuck(tape, program, allow_nested_loops)
+    brainfuck.run_program()
 
