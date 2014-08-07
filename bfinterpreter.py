@@ -69,13 +69,13 @@ class Brainfuck:
                 self.basic_ops[char]()
                 self.pointer += 1
             elif char == "[":
+                loop_pointers.append(self.pointer)
                 if self.tape.get_val() == 0:
                     if self.allow_nested_loops == True:
                         self.end_loop()
                     else:
                         self.pointer = self.program.index("]", self.pointer)
                 else:
-                    loop_pointers.append(self.pointer)
                     self.pointer += 1
             elif char == "]":
                 loop_start = loop_pointers.pop()
