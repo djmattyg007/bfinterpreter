@@ -27,42 +27,58 @@ class Tape:
     def print_val(self):
         print(chr(self.cells[self.pointer]), end="")
 
-brainfuck = Tape()
-oper = {
-    "+" : brainfuck.inc_val,
-    "-" : brainfuck.dec_val,
-    ">" : brainfuck.move_right,
-    "<" : brainfuck.move_left,
-    "." : brainfuck.print_val
-}
+class Brainfuck:
+    def __init__(self, tape, program, allow_nested_loops = True):
+        self.tape = tape
+        self.program = program
+        self.pointer = 0
+        self.allow_nested_loops = allow_nested_loops
+        self.basic_ops = {
+            "+" : tape.inc_val,
+            "-" : tape.dec_val,
+            ">" : tape.move_right,
+            "<" : tape.move_left,
+            "." : tape.print_val
+        }
+
+    def end_loop(self):
+        nested_loop_count = 0
+        while True:
+            self.pointer += 1
+            if self.program[self.pointer] == "]":
+                if nested_loop_count == 0:
+                    break
+                else:
+                    nested_loop_count -= 1
+            elif self.program[self.pointer] == "[":
+                nested_loop_count += 1
+
+    def run_program(self):
+        loop_pointers = []
+        while self.pointer < len(self.program):
+            char = self.program[self.pointer]
+            if char in self.basic_ops.keys():
+                self.basic_ops[char]()
+                self.pointer += 1
+            elif char == "[":
+                if self.tape.get_val() == 0:
+                    if self.allow_nested_loops == True:
+                        self.end_loop()
+                    else:
+                        self.pointer = self.program.index("]", self.pointer)
+                else:
+                    loop_pointers.append(self.pointer)
+                    self.pointer += 1
+            elif char == "]":
+                loop_start = loop_pointers.pop()
+                if self.tape.get_val() == 0:
+                    self.pointer += 1
+                else:
+                    self.pointer = loop_start
+
 
 program = "++++++++[>++++++++++<-]>++.>++++++++[>++++++++++<-]>-.>++++++[>++++++++++<-]>++++++.>++++++[>++++++++++<-]>++++++.[>+<-]>+++++++.[>+<-]>----."
-
-x = 0
-loop_pointers = []
-while x < len(program):
-    char = program[x]
-    if char in oper.keys():
-        oper[char]()
-        x += 1
-    elif char == "[":
-        if brainfuck.get_val() == 0:
-            nested_loop_count = 0
-            while True:
-                x += 1
-                if program[x] == "]":
-                    if nested_loop_count == 0:
-                        break
-                    nested_loop_count -= 1
-                elif program[x] == "[":
-                    nested_loop_count += 1
-        else:
-            loop_pointers.append(x)
-            x += 1
-    elif char == "]":
-        pointer = loop_pointers.pop()
-        if brainfuck.get_val() == 0:
-            x += 1
-        else:
-            x = pointer
+tape = Tape()
+brainfuck = Brainfuck(tape, program, False)
+brainfuck.run_program()
 
