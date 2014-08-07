@@ -1,7 +1,7 @@
 Brainfuck interpreter
 
-This is a simple but fast Brainfuck interpreter written in Python. It accepts
-two arguments.
+This is a simple but fast Brainfuck interpreter written in Python. It
+accepts two arguments.
 
 - "-- program '++++++++++.'"
 
