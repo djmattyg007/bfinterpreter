@@ -61,6 +61,10 @@ class Brainfuck:
         program_length = len(self.program)
         while self.pointer < program_length:
             char = self.program[self.pointer]
+
+            if self.debug == True:
+                print(self.pointer, "\t", char, "\t", end="")
+
             if char in self.basic_ops.keys():
                 self.basic_ops[char]()
                 self.pointer += 1
@@ -81,9 +85,10 @@ class Brainfuck:
                     self.pointer = loop_start
             else:
                 self.pointer += 1
-            if self.debug == True and self.pointer < program_length:
-                print(self.pointer, "\t", self.program[self.pointer], "\t", self.tape.pointer, "\t", self.tape.get_val())
-                time.sleep(0.1)
+
+            if self.debug == True:
+                print(self.tape.pointer, "\t", self.tape.get_val())
+                time.sleep(0.01)
 
 
 if __name__ == "__main__":
