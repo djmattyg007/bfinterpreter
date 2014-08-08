@@ -23,8 +23,6 @@ class Tape:
     def get_val(self):
         return self.cells[self.pointer]
 
-    def print_val(self):
-        print(chr(self.cells[self.pointer]), end="")
 
     def reset(self):
         self.cells = [0]
@@ -42,7 +40,6 @@ class Brainfuck:
             "-" : self.tape.dec_val,
             ">" : self.tape.move_right,
             "<" : self.tape.move_left,
-            "." : self.tape.print_val
         }
 
     def reset(self):
@@ -62,6 +59,9 @@ class Brainfuck:
             elif self.program[self.pointer] == "[":
                 nested_loop_count += 1
 
+    def print_val(self):
+        print(chr(self.tape.get_val()), end="")
+
     def run_program(self):
         if self.debug == True:
             import time
@@ -75,6 +75,9 @@ class Brainfuck:
 
             if char in self.basic_ops.keys():
                 self.basic_ops[char]()
+                self.pointer += 1
+            elif char == ".":
+                self.print_val()
                 self.pointer += 1
             elif char == "[":
                 if self.tape.get_val() == 0:
