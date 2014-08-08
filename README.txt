@@ -35,8 +35,6 @@ A summary of the parameters accepted by the program:
 
 Some notes:
 
--   This interpreter does not currently support the "," operator.
-
 -   Programs that rely on integer overflow are unlikely to work in this
     interpreter due to the nature of how Python allocates memory for integers.
 

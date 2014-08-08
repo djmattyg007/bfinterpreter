@@ -23,15 +23,18 @@ class Tape:
     def get_val(self):
         return self.cells[self.pointer]
 
+    def set_val(self, val):
+        self.cells[self.pointer] = val
 
     def reset(self):
         self.cells = [0]
         self.pointer = 0
 
 class Brainfuck:
-    def __init__(self, tape, program, allow_nested_loops = True, debug = False):
+    def __init__(self, tape, program, input_tape = None, allow_nested_loops = True, debug = False):
         self.tape = tape
         self.program = program
+        self.input_tape = input_tape
         self.pointer = 0
         self.allow_nested_loops = allow_nested_loops
         self.debug = debug
@@ -45,6 +48,17 @@ class Brainfuck:
     def reset(self):
         self.tape.reset()
         self.pointer = 0
+        if self.input_tape is not None:
+            self.input_tape.seek(0)
+
+    def read_input(self):
+        if self.input_tape is None:
+            return 0
+        char = self.input_tape.read(1)
+        if char == "":
+            return 0
+        else:
+            return ord(char)
 
     def end_loop(self):
         nested_loop_count = 0
@@ -94,11 +108,17 @@ class Brainfuck:
                     self.pointer += 1
                 else:
                     self.pointer = loop_start
+            elif char == ",":
+                charval = self.read_input()
+                self.tape.set_val(charval)
+                self.pointer += 1
             else:
                 self.pointer += 1
 
             if self.debug == True:
                 debug_string += str(self.tape.pointer) + "\t" + str(self.tape.get_val())
+                if self.input_tape is not None:
+                    debug_string += "\t" + str(self.input_tape.tell())
                 print("\n" + debug_string)
                 time.sleep(0.01)
 
@@ -111,14 +131,15 @@ if __name__ == "__main__":
             return program_file.read()
 
     def parse_bool(string):
-        if string == "true" or string == "y" or string == "yes":
+        if string == "true" or string == "y" or string == "yes" or string == "1":
             return True
-        elif string == "false" or string == "n" or string == "no":
+        elif string == "false" or string == "n" or string == "no" or string == "0":
             return False
         else:
             return None
 
     program = ""
+    input_tape = None
     allow_nested_loops = True
     debug = False
 
@@ -128,12 +149,21 @@ if __name__ == "__main__":
             program = args[x + 1]
         elif arg == "--program-file":
             program = read_program_file(args[x + 1])
+        elif arg == "--input":
+            from io import StringIO
+            input_tape = StringIO(args[x + 1])
+        elif arg == "--input-file":
+            input_tape = open(args[x + 1], encoding="utf-8")
         elif arg == "--nested-loops":
             allow_nested_loops = parse_bool(args[x + 1])
         elif arg == "--debug":
             debug = parse_bool(args[x + 1])
 
     tape = Tape()
-    brainfuck = Brainfuck(tape, program, allow_nested_loops, debug)
+    brainfuck = Brainfuck(tape, program, input_tape, allow_nested_loops, debug)
     brainfuck.run_program()
+
+    # Cleanup
+    if input_tape is not None:
+        input_tape.close()
 
