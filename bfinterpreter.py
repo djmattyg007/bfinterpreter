@@ -71,7 +71,7 @@ class Brainfuck:
             char = self.program[self.pointer]
 
             if self.debug == True:
-                print(self.pointer, "\t", char, "\t", end="")
+                debug_string = str(self.pointer) + "\t" + char + "\t"
 
             if char in self.basic_ops.keys():
                 self.basic_ops[char]()
@@ -98,7 +98,8 @@ class Brainfuck:
                 self.pointer += 1
 
             if self.debug == True:
-                print(self.tape.pointer, "\t", self.tape.get_val())
+                debug_string += str(self.tape.pointer) + "\t" + str(self.tape.get_val())
+                print("\n" + debug_string)
                 time.sleep(0.01)
 
 
