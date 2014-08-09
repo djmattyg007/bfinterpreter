@@ -52,6 +52,11 @@ A summary of the parameters accepted by the program:
     dealing with input.
     This parameter is optional and defaults to 0.
 
+- "--dump-tape"
+
+    Specifying this will print the contents of the tape to the terminal once
+    the program has finished executing.
+
 Some notes:
 
 -   The recording tape used by the interpreter is boundless on the right side

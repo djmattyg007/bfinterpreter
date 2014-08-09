@@ -144,6 +144,7 @@ if __name__ == "__main__":
     allow_nested_loops = True
     debug = False
     eof_ord = 0
+    dump_tape = False
 
     args = sys.argv[1:]
     for x, arg in enumerate(args):
@@ -162,10 +163,15 @@ if __name__ == "__main__":
             debug = parse_bool(args[x + 1])
         elif arg == "--eof":
             eof_ord = int(args[x + 1])
+        elif arg == "--dump-tape":
+            dump_tape = True
 
     tape = Tape()
     brainfuck = Brainfuck(tape, program, input_tape, allow_nested_loops, debug, eof_ord)
     brainfuck.run_program()
+
+    if dump_tape == True:
+        print("\n", tape.cells)
 
     # Cleanup
     if input_tape is not None:
