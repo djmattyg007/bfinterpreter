@@ -54,7 +54,7 @@ class Brainfuck:
 
     def read_input(self):
         if self.input_tape is None:
-            return 0
+            return self.eof_ord
         char = self.input_tape.read(1)
         if char == "":
             return self.eof_ord
