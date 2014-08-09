@@ -62,17 +62,14 @@ class Brainfuck:
             return ord(char)
 
     def end_loop(self):
-        nested_loop_count = 0
-        while True:
+        nested_loop_count = 1
+        while nested_loop_count > 0:
             self.pointer += 1
             if self.program[self.pointer] == "]":
-                if nested_loop_count == 0:
-                    self.pointer += 1
-                    break
-                else:
-                    nested_loop_count -= 1
+                nested_loop_count -= 1
             elif self.program[self.pointer] == "[":
                 nested_loop_count += 1
+        self.pointer += 1
 
     def print_val(self):
         print(chr(self.tape.get_val()), end="")
