@@ -205,7 +205,7 @@ if __name__ == "__main__":
     brainfuck.run_program()
 
     if dump_tape == True:
-        print("\n", tape.cells)
+        print("\n" + str(tape.cells))
 
     # Cleanup
     if input_tape is not None:
