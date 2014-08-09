@@ -1,6 +1,12 @@
 #!/usr/bin/python3
 
 class Tape:
+    '''
+    A generic implementation of a record tape for a Turing Machine.
+    It's bounded on the left side and unbounded on the right side.
+    It stores only Python integers.
+    '''
+
     def __init__(self):
         self.reset()
 
@@ -27,6 +33,11 @@ class Tape:
         self.cells[self.pointer] = val
 
     def reset(self):
+        '''
+        Reset the tape to the same state it was in when it was
+        first initialised (ie. empty).
+        '''
+
         self.cells = [0]
         self.pointer = 0
 
@@ -47,12 +58,22 @@ class Brainfuck:
         }
 
     def reset(self):
+        '''
+        Reset the interpreter to the same state it was in before
+        program execution commenced.
+        '''
+
         self.tape.reset()
         self.pointer = 0
         if self.input_tape is not None:
             self.input_tape.seek(0)
 
     def read_input(self):
+        '''
+        Read a single character from the input tape supplied to
+        the interpreter.
+        '''
+
         if self.input_tape is None:
             return self.eof_ord
         char = self.input_tape.read(1)
@@ -62,6 +83,11 @@ class Brainfuck:
             return ord(char)
 
     def end_loop(self):
+        '''
+        Call when the start of a loop is encountered and nested loops
+        are supported. Move to the matching end-of-loop operator.
+        '''
+
         nested_loop_count = 1
         while nested_loop_count > 0:
             self.pointer += 1
@@ -69,9 +95,15 @@ class Brainfuck:
                 nested_loop_count -= 1
             elif self.program[self.pointer] == "[":
                 nested_loop_count += 1
+        # Small optimisation: skip the end-of-loop operator
         self.pointer += 1
 
     def print_val(self):
+        '''
+        Print the unicode character represented by the byte value
+        stored at the current position on the recording tape.
+        '''
+
         print(chr(self.tape.get_val()), end="")
 
     def run_program(self):
@@ -129,6 +161,11 @@ if __name__ == "__main__":
             return program_file.read()
 
     def parse_bool(string):
+        '''
+        Turn a string representation of a boolean value into an actual
+        boolean-typed value.
+        '''
+
         if string == "true" or string == "y" or string == "yes" or string == "1":
             return True
         elif string == "false" or string == "n" or string == "no" or string == "0":
