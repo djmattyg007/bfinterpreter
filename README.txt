@@ -46,6 +46,12 @@ A summary of the parameters accepted by the program:
 
     This parameter is optional and defaults to false.
 
+- "--eof int"
+
+    Used to change the value used as the EOF byte value by the interpreter when
+    dealing with input.
+    This parameter is optional and defaults to 0.
+
 Some notes:
 
 -   The recording tape used by the interpreter is boundless on the right side

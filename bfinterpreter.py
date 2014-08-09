@@ -31,13 +31,14 @@ class Tape:
         self.pointer = 0
 
 class Brainfuck:
-    def __init__(self, tape, program, input_tape = None, allow_nested_loops = True, debug = False):
+    def __init__(self, tape, program, input_tape = None, allow_nested_loops = True, debug = False, eof_ord = 0):
         self.tape = tape
         self.program = program
         self.input_tape = input_tape
         self.pointer = 0
         self.allow_nested_loops = allow_nested_loops
         self.debug = debug
+        self.eof_ord = eof_ord
         self.basic_ops = {
             "+" : self.tape.inc_val,
             "-" : self.tape.dec_val,
@@ -56,7 +57,7 @@ class Brainfuck:
             return 0
         char = self.input_tape.read(1)
         if char == "":
-            return 0
+            return self.eof_ord
         else:
             return ord(char)
 
@@ -142,6 +143,7 @@ if __name__ == "__main__":
     input_tape = None
     allow_nested_loops = True
     debug = False
+    eof_ord = 0
 
     args = sys.argv[1:]
     for x, arg in enumerate(args):
@@ -158,9 +160,11 @@ if __name__ == "__main__":
             allow_nested_loops = parse_bool(args[x + 1])
         elif arg == "--debug":
             debug = parse_bool(args[x + 1])
+        elif arg == "--eof":
+            eof_ord = int(args[x + 1])
 
     tape = Tape()
-    brainfuck = Brainfuck(tape, program, input_tape, allow_nested_loops, debug)
+    brainfuck = Brainfuck(tape, program, input_tape, allow_nested_loops, debug, eof_ord)
     brainfuck.run_program()
 
     # Cleanup
