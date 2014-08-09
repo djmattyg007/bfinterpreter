@@ -166,9 +166,9 @@ if __name__ == "__main__":
         boolean-typed value.
         '''
 
-        if string == "true" or string == "y" or string == "yes" or string == "1" or string == "on":
+        if string in ["true", "y", "yes", "1", "on"]:
             return True
-        elif string == "false" or string == "n" or string == "no" or string == "0" or string == "off":
+        elif string in ["false", "n", "no", "0", "off"]:
             return False
         else:
             return None
