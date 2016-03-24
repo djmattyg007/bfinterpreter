@@ -4,7 +4,7 @@ This is a simple but fast Brainfuck interpreter written in Python.
 
 A summary of the parameters accepted by the program:
 
-- "-- program '++++++++++.'"
+- "--program '++++++++++.'"
 
     Used to pass a program to the interpreter from the command line.
 
